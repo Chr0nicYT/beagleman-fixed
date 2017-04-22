@@ -4,23 +4,36 @@ Custom Amazon Alexa commands for the RaspberryPi (AlexaPi) (BeagleAlexa)
 # Tutorial
 
 PREP:
+```
 sudo apt-get install swig python-alsaaudio sox espeak libcurl4-openssl-dev libsox-fmt-mp3 bison autoconf 
+```
 YOU WILL REMOVE PYTHON-ALSAAUDIO LATER ON. THIS JUST WORRKED FOR ME.
+
+```
 sudo pip install pycurl cherrypy
 sudo -i
 nano /root/.bashrc
+```
+
 ADD THE BELOW LINES TO THE BOTTOM OF .bashrc:
+
+```
 export LD_LIBRARY_PATH=/usr/local/lib
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 export PYTHONPATH=/usr/local/lib/python2.7/site-packages/        
+```
 
 NEVER DELETE THE FOLDERS WE ARE CLONING. NEVER.
+
+```
 cd /root/
 git clone http://github.com/cmusphinx/pocketsphinx.git
 git clone http://github.com/cmusphinx/sphinxbase.git
+```
 
-BELOW, LOOK FOR SOMETHING LIKE: the package (WHATEVER) doesn't seemed to be jnstalled, or something like that. just do sudo apt-get install (that whatever thing)
+BELOW, LOOK FOR SOMETHING LIKE: the package (WHATEVER) doesn't seemed to be installed, or something like that. just do sudo apt-get install (that whatever thing it says that is missing)
 
+```
 cd /root/sphinxbase/
 ./autogen.sh
 make
@@ -32,15 +45,25 @@ make
 make install
 
 sudo apt-get remove python-alsaaudio
-
+```
 YOU NEED TO RUN THIS:
+
+BTW: You can delete the AlexaPi folder when you are dine. JUST THE ALEXAPI FOLDER. -_-
+
+```
 cd /root/
 git clone https://github.com/alexa-pi/AlexaPi
+```
+
 (AT THE FIRST MESSAGE WHERE IT SAYS ABORT, TYPE N FOR NO, THEN PRESS ENTER.)
 DON'T ENABLE AT BOOT AND ONLY CLONE IT IN /root/ NOT /opt/
+
+```
 sudo -i
 cd /root/AlexaPi/src/scripts/
 ./setup.sh
+```
+
 1) Go to developers.amazon.com, sign up, then click alexa, then alexa voice service, and create a new profile for a device.
 2) Customize the profile id and description to your liking.
 3) On the security profile tab, select web, then on the first box put: http://localhost:5050 THEN ADD ANOTHER WITH YOUR PI IP: http://ip:5050
@@ -63,13 +86,23 @@ ON YOUR WEB BROWSER:
 #
 #OPTIONAL TUTORIAL:
 THIS WILL SET YOUR SOUNDCARD AS DEFAULT PLAYBACK AND CAPTURE? WORKS WITH SHAIRPORT TOO ;)
+(And anything that uses aplay and arecird for that matter.)
+
+```
 sudo nano /usr/share/alsa/alsa.conf
+```
+
 look for defaults.ctl or pcm (something like that)
 replace the 0 after that defaults.* with 1
+
+```
 CTRL+X, Y, [Enter]
 sudo nano /etc/asound.conf
+```
+
 PASTE THE FOLLOWING:
 
+```
 pcm.!default {
         type plug
         slave {
@@ -80,31 +113,44 @@ ctl.!default {
        type hw
         card 1
 }
+```
 
 THEN:
-CTRK+X, Y, [ENTER]
+CTRL+X, Y, [ENTER]
 
+```
 sudo reboot
+```
 
 TEST ON NEXT STARTUP WITH:
-speaker-test
 
+```
+speaker-test
+```
 
 THIS WILL RUN BEAGLEMAN ON BOOT:
+
+```
 sudo -i
 cd /etc/init.d/
 nano beagleman.sh
+```
+
 PASTE THE BELOW LINES INTO beagleman.sh:
 
+```
 #!/bin/bash
 python /root/beagleman/beagleman.py
+```
 
 THEN (You know the drill):
 CTRL+X, Y, [Enter]
 
 FINALLY:
 
+```
 update-rc.d /etc/init.d/beagleman.py defaults
+```
 
 TEST BY REBOOTING IT, YOU SHOULD HEAR: "Hello [name], ask me anything"
 
