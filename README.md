@@ -90,7 +90,6 @@ TEST ON NEXT STARTUP WITH:
 speaker-test
 
 
-
 THIS WILL RUN BEAGLEMAN ON BOOT:
 sudo -i
 cd /etc/init.d/
